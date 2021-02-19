@@ -1,0 +1,43 @@
+{
+  "name": "@huds0n/components",
+  "version": "1.5.0-beta.8",
+  "description": "Enhanced React Native components",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "keywords": [
+    "button",
+    "components",
+    "enhanced",
+    "flatlist",
+    "icon",
+    "pressable",
+    "scrollview",
+    "view"
+  ],
+  "contributors": [
+    {
+      "name": "J Hudson"
+    },
+    {
+      "name": "M Hudson"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@expo/vector-icons": "^12.0.0",
+    "@huds0n/core": "1.5.0-beta.8",
+    "@huds0n/error": "1.5.0-beta.8",
+    "@huds0n/utilities": "1.5.0-beta.8",
+    "react-native-vector-icons": "^7.1.0"
+  },
+  "devDependencies": {
+    "@types/react-native": "~0.63.2"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": "^12.0.0",
+    "react-native-vector-icons": "^7.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
