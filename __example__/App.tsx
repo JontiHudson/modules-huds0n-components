@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
 import { Button, Icon, ScrollView, View } from '@huds0n/components';
-import { useState } from '@huds0n/utilities';
 
 export default function Components() {
   const [badge, setBadge] = useState(0);
@@ -106,7 +105,12 @@ export default function Components() {
                   }
                   set="MaterialCommunityIcons"
                   badge={badge}
-                  badgeProps={{ color: colors.GREY, maxValue: 5, size: 15 }}
+                  badgeProps={{
+                    color: colors.RED,
+                    maxValue: 5,
+                    size: 15,
+                    textStyle: { color: colors.WHITE },
+                  }}
                 />
               )}
             </Button>
@@ -120,6 +124,7 @@ export default function Components() {
 const colors = {
   BLUE: 'lightblue',
   GREY: 'grey',
+  RED: 'red',
   WHITE: 'white',
 };
 

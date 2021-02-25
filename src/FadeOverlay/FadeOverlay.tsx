@@ -24,8 +24,8 @@ export namespace FadeOverlay {
 }
 
 function _FadeOverlay({
-  color = 'white',
-  position,
+  color = Core.colors.BACKGROUND,
+  position = 'TOP',
   intensity = 2,
   height,
   width,
@@ -81,10 +81,7 @@ function _FadeOverlay({
       array.push(
         <LinearGradient
           key={i}
-          colors={[
-            color || Core.colors.WHITE,
-            addColorTransparency(color, 0) || Core.colors.TRANSPARENT,
-          ]}
+          colors={[color, addColorTransparency(color, 0)]}
           style={StyleSheet.absoluteFill}
           {...gradientProps}
         />,

@@ -14,7 +14,7 @@ import { useMemo } from '@huds0n/utilities';
 import { theming } from './theming';
 
 const DEFAULT_SIZE = 14;
-const DEFAULT_MAX_VALUE = 14;
+const DEFAULT_MAX_VALUE = 9;
 
 export namespace Badge {
   export type Offset = { x?: number; y?: number };
@@ -70,7 +70,7 @@ function handleStyle({
 
 function handleBadgeContents({
   maxValue = DEFAULT_MAX_VALUE,
-  textColor,
+  textColor = Core.colors.WHITE,
   textStyle,
   size = DEFAULT_SIZE,
   value,

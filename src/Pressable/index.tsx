@@ -22,9 +22,7 @@ import * as Types from '../types';
 import { theming } from './theming';
 
 export namespace Pressable {
-  export type AndroidRipple =
-    | boolean
-    | (PressableAndroidRippleConfig & { intensity?: number });
+  export type AndroidRipple = boolean | PressableAndroidRippleConfig;
 
   export type FeedBack = 'fade' | 'highlight' | 'none';
 
@@ -100,7 +98,11 @@ function handlePress(props: Pressable.Props) {
   return { onPress, onPressIn, onPressOut };
 }
 
-function handleAndroidRipple({ android_ripple, style }: Pressable.Props) {
+function handleAndroidRipple({
+  android_ripple,
+  feedbackIntensity,
+  style,
+}: Pressable.Props) {
   return useMemo(() => {
     if (Platform.OS === 'android' && android_ripple) {
       if (typeof android_ripple === 'object' && android_ripple.color) {
@@ -117,11 +119,11 @@ function handleAndroidRipple({ android_ripple, style }: Pressable.Props) {
         ..._android_ripple,
         color:
           typeof backgroundColor === 'string'
-            ? highlightColor(backgroundColor, _android_ripple.intensity)
+            ? highlightColor(backgroundColor, feedbackIntensity)
             : undefined,
       };
     }
-  }, [android_ripple, style]);
+  }, [android_ripple, feedbackIntensity, style]);
 }
 
 function handleStyle(props: Pressable.Props) {
