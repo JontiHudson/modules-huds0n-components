@@ -1,4 +1,5 @@
 import {
+  Animated,
   FlatList as FlatListRN,
   FlatListProps as FlatListPropsRN,
 } from 'react-native';
@@ -24,4 +25,5 @@ export type Props<ItemT = any> = FlatListPropsRN<ItemT> & {
   fade?: FadeProps;
   keyName?: string;
   onPullToRefresh?: () => Promise<void> | void;
+  reverseZIndex?: boolean;
 };

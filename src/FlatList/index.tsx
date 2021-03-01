@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList as FlatListRN,
+  Animated,
   ListRenderItem as ListRenderItemRN,
   ListRenderItemInfo as ListRenderItemInfoRN,
 } from 'react-native';
@@ -12,6 +12,7 @@ import {
   getKeyExtractor,
   getRefreshControl,
   handleDynamicScrollLayout,
+  handleZIndex,
 } from './helpers';
 import { theming } from './theming';
 import * as Types from './types';
@@ -25,7 +26,7 @@ export namespace FlatList {
   export type ListRenderItemInfo<ItemT = any> = ListRenderItemInfoRN<ItemT>;
 }
 
-const _FlatList = React.forwardRef<FlatListRN, FlatList.Props>(
+const _FlatList = React.forwardRef(
   (props: FlatList.Props, ref: FlatList.Ref) => {
     const { numColumns, fade, style } = props;
 
@@ -34,7 +35,7 @@ const _FlatList = React.forwardRef<FlatListRN, FlatList.Props>(
         <View>
           {fade && <FadeOverlayContainer {...fade} />}
 
-          <FlatListRN
+          <Animated.FlatList
             ref={ref}
             onEndReachedThreshold={0.5}
             key={numColumns}
@@ -43,6 +44,7 @@ const _FlatList = React.forwardRef<FlatListRN, FlatList.Props>(
             {...getKeyExtractor(props)}
             {...getRefreshControl(props)}
             {...handleDynamicScrollLayout(props)}
+            {...handleZIndex(props)}
           />
         </View>
       </View>

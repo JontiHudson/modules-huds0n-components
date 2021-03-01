@@ -1,13 +1,13 @@
 import React from 'react';
-import { RefreshControl } from 'react-native';
+import { ListRenderItemInfo, RefreshControl, View } from 'react-native';
 
 import {
   useAsyncCallback,
   useCallback,
   useKeyExtractor,
   useMemo,
-  useState,
   useRef,
+  useState,
 } from '@huds0n/utilities';
 
 import * as Types from './types';
@@ -104,4 +104,20 @@ export function handleDynamicScrollLayout({
     scrollEnabled:
       scrollEnabled && (!dynamicScrollingEnabled || _scrollEnabled),
   };
+}
+
+export function handleZIndex({
+  CellRendererComponent = View,
+  reverseZIndex,
+}: Types.Props) {
+  if (reverseZIndex) {
+    return {
+      CellRendererComponent: (info: ListRenderItemInfo<any>) => (
+        <CellRendererComponent
+          {...info}
+          style={{ zIndex: -info.index, elevation: -info.index }}
+        />
+      ),
+    };
+  }
 }
