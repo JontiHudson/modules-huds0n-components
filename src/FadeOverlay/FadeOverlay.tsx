@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Core } from '@huds0n/core';
+import Huds0nError from '@huds0n/error';
 import { addColorTransparency, useMemo } from '@huds0n/utilities';
 
 import { LinearGradient } from './LinearGradient';
@@ -30,6 +31,15 @@ function _FadeOverlay({
   height,
   width,
 }: FadeOverlay.Props) {
+  if (!LinearGradient) {
+    throw new Huds0nError({
+      name: 'linear-gradient-error',
+      code: 'LINEAR-GRADIENT_MISSING',
+      message: 'Please check correct linear gradient module is downloaded',
+      severity: 'HIGH',
+    });
+  }
+
   const [gradientProps, positionStyle] = useMemo(() => {
     switch (position) {
       case 'BOTTOM':

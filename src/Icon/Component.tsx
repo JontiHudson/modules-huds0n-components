@@ -14,7 +14,7 @@ import { Badge } from '../Badge';
 import { Pressable } from '../Pressable';
 
 import * as Types from './types';
-import { VectorIcons } from './VectorIcon';
+import { VectorIcons } from './VectorIcons';
 
 const DEFAULT_SIZE = Core.fontSizes.BODY;
 const DISABLED_COLOR = Core.colors.DISABLED;

@@ -1,5 +1,5 @@
 export const theming = {
   props: {
-    style: 'viewStyle',
+    style: 'pressStyle',
   },
 } as const;
