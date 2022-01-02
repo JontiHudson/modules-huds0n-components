@@ -2,7 +2,6 @@ import React from 'react';
 
 import { IconComponent } from './Component';
 
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace Icon {
@@ -29,7 +28,6 @@ function createSheet<I extends Record<string, Partial<Types.Props>>>(icons: I) {
 
 export class Icon extends React.Component<Icon.Props> {
   static createSheet = createSheet;
-  static theming = theming;
 
   render() {
     return <IconComponent {...this.props} />;

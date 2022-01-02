@@ -6,7 +6,7 @@ import * as Types from '../types';
 export type Children = string | React.ReactNode;
 
 export type Props = Omit<Pressable.Props, 'children' | 'style'> & {
-  children?: Pressable.Props['children'];
+  children?: string | Pressable.Props['children'];
   color?: string;
   disabledLabelStyle?: StyleProp<TextStyle>;
   disabledStyle?: StyleProp<ViewStyle>;
@@ -20,7 +20,7 @@ export type Props = Omit<Pressable.Props, 'children' | 'style'> & {
   spinnerColor?: string;
   spinnerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
-  useIsConnected?: boolean;
+  requiresNetwork?: boolean;
 };
 
 export type LabelProps = Props & { pressed: boolean };

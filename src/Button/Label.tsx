@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 
 import * as Types from './types';
 
@@ -33,7 +33,7 @@ function handleLabelStyle({
   pressedLabelStyle,
 }: Types.LabelProps) {
   return StyleSheet.flatten([
-    { color: Core.colors.TEXT, fontSize: Core.fontSizes.LABEL },
+    { color: theme.colors.TEXT, fontSize: theme.fontSizes.LABEL },
     labelStyle,
     disabled && disabledLabelStyle,
     pressed && pressedLabelStyle,

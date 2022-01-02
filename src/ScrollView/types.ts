@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 
 import { FadeOverlayContainer } from '../FadeOverlay';
-import { theming } from './theming';
 
 export type FadeProp = FadeOverlayContainer.FadeProp;
 
@@ -13,8 +12,6 @@ export type Props = React.PropsWithChildren<ScrollViewPropsRN> & {
   fade?: FadeOverlayContainer.Props;
 };
 
-export type _Component = React.ForwardRefExoticComponent<
+export type Component = React.ForwardRefExoticComponent<
   Props & React.RefAttributes<ScrollViewRN>
 >;
-
-export type Component = _Component & { theming: typeof theming };

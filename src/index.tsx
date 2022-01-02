@@ -5,4 +5,4 @@ export * from './FlatList';
 export * from './Icon';
 export * from './Pressable';
 export * from './ScrollView';
-export * from './View';
+export * from './LayoutView';

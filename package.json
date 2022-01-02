@@ -1,6 +1,6 @@
 {
   "name": "@huds0n/components",
-  "version": "1.5.1-beta3",
+  "version": "1.6.0-beta-1",
   "description": "Enhanced React Native components",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -24,21 +24,23 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@huds0n/core": "1.5.1-beta3",
-    "@huds0n/error": "1.5.1-beta3",
-    "@huds0n/utilities": "1.5.1-beta3"
-  },
-  "devDependencies": {
-    "@types/react": "~16.9.35",
-    "@types/react-native": "~0.63.2",
-    "@types/tinycolor2": "^1.4.2",
-    "typescript": "~4.0.0"
+    "@huds0n/error": "1.6.0-beta-1",
+    "@huds0n/theming": "1.6.0-beta-1",
+    "@huds0n/utilities": "1.6.0-beta-1"
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^12.0.0",
-    "expo-linear-gradient": "~9.1.0",
+    "@huds0n/inputs": "1.6.0-beta-1",
+    "@huds0n/network-manager": "1.6.0-beta-1",
+    "expo-linear-gradient": "~11.0.0",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-vector-icons": "^7.1.0"
+    "react-native-vector-icons": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-native": "^0.66.11",
+    "@types/tinycolor2": "^1.4.3",
+    "typescript": "^4.5.4"
   },
   "publishConfig": {
     "access": "public"

@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { FadeOverlay } from './FadeOverlay';
-import { themingFadeOverlayContainer } from './theming';
 
 export namespace FadeOverlayContainer {
   export type FadeProp = Omit<FadeOverlay.Props, 'position'> | boolean;
@@ -14,12 +13,10 @@ export namespace FadeOverlayContainer {
     right?: FadeProp;
   };
 
-  export type Component = React.FunctionComponent<Props> & {
-    theming: typeof themingFadeOverlayContainer;
-  };
+  export type Component = React.FunctionComponent<Props>;
 }
 
-function _FadeOverlayContainer({
+export function FadeOverlayContainer({
   bottom,
   left,
   right,
@@ -42,8 +39,3 @@ function _FadeOverlayContainer({
     </View>
   );
 }
-
-export const FadeOverlayContainer: FadeOverlayContainer.Component = Object.assign(
-  _FadeOverlayContainer,
-  { theming: themingFadeOverlayContainer },
-);

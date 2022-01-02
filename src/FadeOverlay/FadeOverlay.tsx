@@ -1,44 +1,37 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Core } from '@huds0n/core';
-import Huds0nError from '@huds0n/error';
+import { theme } from '@huds0n/theming/src/theme';
 import { addColorTransparency, useMemo } from '@huds0n/utilities';
 
-import { LinearGradient } from './LinearGradient';
-import { themingFadeOverlay } from './theming';
+import { getLinearGradient } from '../helpers';
 
 export namespace FadeOverlay {
   export type Position = 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT';
 
   export type Props = {
     color?: string;
+    enable?: boolean;
     height?: number | string;
     width?: number | string;
     intensity?: number;
     position?: Position;
+    absolute?: boolean;
   };
 
-  export type Component = React.FunctionComponent<FadeOverlay.Props> & {
-    theming: typeof themingFadeOverlay;
-  };
+  export type Component = React.FunctionComponent<FadeOverlay.Props>;
 }
 
-function _FadeOverlay({
-  color = Core.colors.BACKGROUND,
+export function FadeOverlay({
+  color = theme.colors.BACKGROUND,
+  enable = true,
   position = 'TOP',
   intensity = 2,
   height,
   width,
+  absolute = true,
 }: FadeOverlay.Props) {
-  if (!LinearGradient) {
-    throw new Huds0nError({
-      name: 'linear-gradient-error',
-      code: 'LINEAR-GRADIENT_MISSING',
-      message: 'Please check correct linear gradient module is downloaded',
-      severity: 'HIGH',
-    });
-  }
+  const LinearGradient = getLinearGradient();
 
   const [gradientProps, positionStyle] = useMemo(() => {
     switch (position) {
@@ -47,7 +40,7 @@ function _FadeOverlay({
           { start: { x: 0, y: 1 }, end: { x: 0, y: 0 } },
           {
             bottom: 0,
-            height: height || Core.spacings.L,
+            height: height || theme.spacings.L,
             width: width || '100%',
           },
         ];
@@ -58,7 +51,7 @@ function _FadeOverlay({
           {
             left: 0,
             height: height || '100%',
-            width: width || Core.spacings.L,
+            width: width || theme.spacings.L,
           },
         ];
 
@@ -68,7 +61,7 @@ function _FadeOverlay({
           {
             right: -StyleSheet.hairlineWidth,
             height: height || '100%',
-            width: width || Core.spacings.L,
+            width: width || theme.spacings.L,
           },
         ];
 
@@ -77,7 +70,7 @@ function _FadeOverlay({
           { start: { x: 0, y: 0 }, end: { x: 0, y: 1 } },
           {
             top: 0,
-            height: height || Core.spacings.L,
+            height: height || theme.spacings.L,
             width: width || '100%',
           },
         ];
@@ -101,12 +94,14 @@ function _FadeOverlay({
   }, [color]);
 
   return (
-    <View style={{ position: 'absolute', zIndex: 1000, ...positionStyle }}>
-      {gradients}
+    <View
+      style={{
+        position: absolute ? 'absolute' : 'relative',
+        zIndex: 1000,
+        ...positionStyle,
+      }}
+    >
+      {enable && gradients}
     </View>
   );
 }
-
-export const FadeOverlay: FadeOverlay.Component = Object.assign(_FadeOverlay, {
-  theming: themingFadeOverlay,
-});

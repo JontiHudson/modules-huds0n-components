@@ -1,19 +1,21 @@
-import { findNodeHandle, ScrollView, UIManager } from 'react-native';
+import { ScrollView } from 'react-native';
 
-import { measureNodeAsync, measureRelativeNodeAsync } from '@huds0n/utilities';
+import {
+  getNodeId,
+  getIsDescendant,
+  measureNodeAsync,
+  measureRelativeNodeAsync,
+} from '@huds0n/utilities';
 
 export async function scrollToFocus(
   scrollView: ScrollView,
-  focusedNodeId: number,
+  focusedInputId: number,
   inputPadding = 20,
   scrollPosition: number,
 ) {
-  const scrollViewNodeId = findNodeHandle(scrollView);
+  const scrollViewNodeId = getNodeId(scrollView);
 
-  if (
-    scrollViewNodeId === null ||
-    !(await getIsDescendant(focusedNodeId, scrollViewNodeId))
-  ) {
+  if (!(await getIsDescendant(focusedInputId, scrollViewNodeId))) {
     return;
   }
 
@@ -22,7 +24,7 @@ export async function scrollToFocus(
     null | { start: number; end: number },
   ] = await Promise.all([
     getScrollViewHeight(scrollViewNodeId),
-    getInputPosition(focusedNodeId, scrollViewNodeId, inputPadding),
+    getInputPosition(focusedInputId, scrollViewNodeId, inputPadding),
   ]);
 
   if (scrollViewHeight === null || inputPosition === null) {
@@ -42,14 +44,14 @@ export async function scrollToFocus(
   }
 }
 
-async function getScrollViewHeight(scrollViewNodeId: number) {
+async function getScrollViewHeight(scrollViewNodeId: number | string) {
   const { height } = await measureNodeAsync(scrollViewNodeId);
   return height;
 }
 
 async function getInputPosition(
-  focusedId: number,
-  scrollViewNodeId: number,
+  focusedId: number | string,
+  scrollViewNodeId: number | string,
   inputPadding: number,
 ) {
   const { height, top } = await measureRelativeNodeAsync(
@@ -61,17 +63,4 @@ async function getInputPosition(
     start: top - inputPadding,
     end: top + height + inputPadding,
   };
-}
-
-function getIsDescendant(focusedId: number, scrollViewNodeId: number) {
-  return new Promise((resolve) => {
-    // @ts-ignore viewIsDescendantOf not typed
-    UIManager.viewIsDescendantOf(
-      focusedId,
-      scrollViewNodeId,
-      (isDescendant: boolean) => {
-        resolve(isDescendant);
-      },
-    );
-  });
 }

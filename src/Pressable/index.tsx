@@ -16,10 +16,9 @@ import {
   useMemo,
   useRef,
 } from '@huds0n/utilities';
+import { huds0nState } from '@huds0n/utilities/src/_core';
 
 import * as Types from '../types';
-
-import { theming } from './theming';
 
 export namespace Pressable {
   export type AndroidRipple = boolean | PressableAndroidRippleConfig;
@@ -40,28 +39,36 @@ export namespace Pressable {
     onPress?: OnPressFn;
     whilePress?: () => () => void;
     style?: Style;
+    requiresNetwork?: boolean;
   };
 
   export type Ref = typeof ViewRN;
 
-  export type Component = _Component & { theming: typeof theming };
+  export type Component = React.ForwardRefExoticComponent<
+    Pressable.Props & React.RefAttributes<ViewRN>
+  >;
 }
 
-export type _Component = React.ForwardRefExoticComponent<
-  Pressable.Props & React.RefAttributes<ViewRN>
->;
-
-const _Pressable: _Component = React.forwardRef((props, ref) => {
+export const Pressable: Pressable.Component = React.forwardRef((props, ref) => {
   return (
     <PressableRN
       ref={ref}
       {...props}
+      disabled={handleDisabled(props)}
       {...handlePress(props)}
       android_ripple={handleAndroidRipple(props)}
       style={handleStyle(props)}
     />
   );
 });
+
+function handleDisabled({ disabled, requiresNetwork }: Pressable.Props) {
+  if (requiresNetwork && !huds0nState.useProp('isNetworkConnected')[0]) {
+    return true;
+  }
+
+  return disabled;
+}
 
 function highlightColor(color: string, amount?: number) {
   const highlightedColor = darkenColor(color, amount);
@@ -186,5 +193,3 @@ function getHighlightFeedbackStyle({
         : {},
   ]);
 }
-
-export const Pressable = Object.assign(_Pressable, { theming });

@@ -8,10 +8,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 import { useMemo } from '@huds0n/utilities';
-
-import { theming } from './theming';
 
 const DEFAULT_SIZE = 14;
 const DEFAULT_MAX_VALUE = 9;
@@ -30,12 +28,10 @@ export namespace Badge {
     value: number;
   };
 
-  export type Component = React.FunctionComponent<Props> & {
-    theming: typeof theming;
-  };
+  export type Component = React.FunctionComponent<Props>;
 }
 
-function _Badge(props: Badge.Props) {
+export function Badge(props: Badge.Props) {
   const Contents = handleBadgeContents(props);
 
   if (!props.value) return null;
@@ -44,7 +40,7 @@ function _Badge(props: Badge.Props) {
 }
 
 function handleStyle({
-  color = Core.colors.BADGE,
+  color = theme.colors.BADGE,
   containerStyle,
   offset,
   size = DEFAULT_SIZE,
@@ -70,13 +66,16 @@ function handleStyle({
 
 function handleBadgeContents({
   maxValue = DEFAULT_MAX_VALUE,
-  textColor = Core.colors.WHITE,
+  textColor = theme.colors.WHITE,
   textStyle,
   size = DEFAULT_SIZE,
   value,
 }: Badge.Props) {
   return useMemo(() => {
     if (!value) return null;
+
+    const text =
+      value > maxValue ? maxValue.toFixed(0) + '+' : value.toFixed(0);
 
     return (
       <Text
@@ -85,17 +84,15 @@ function handleBadgeContents({
         style={StyleSheet.flatten([
           {
             color: textColor,
-            fontSize: size * 0.8,
+            fontSize: size * (text.length > 1 ? 0.6 : 0.8),
             fontWeight: '300',
             textAlign: 'center',
           },
           textStyle,
         ])}
       >
-        {value > maxValue ? maxValue.toFixed(0) + '+' : value.toFixed(0)}
+        {text}
       </Text>
     );
   }, [maxValue, size, textColor, textStyle, value]);
 }
-
-export const Badge = Object.assign(_Badge, { theming });

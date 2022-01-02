@@ -3,11 +3,12 @@ import { View as ViewRN, ViewProps as ViewPropsRN } from 'react-native';
 
 import { useLayout } from '@huds0n/utilities';
 
-export namespace ViewMeasure {
+export namespace LayoutView {
   export type Layout = useLayout.Layout;
 
   export type Props = Omit<ViewPropsRN, 'children'> & {
-    children: (layout: Layout) => React.ReactNode | React.ReactNode[];
+    children?: (layout: Layout) => React.ReactNode | React.ReactNode[];
+    significantChangePercent?: number;
   };
 
   export type Component = React.ForwardRefExoticComponent<
@@ -15,15 +16,19 @@ export namespace ViewMeasure {
   >;
 }
 
-export const ViewMeasure: ViewMeasure.Component = React.forwardRef(
+export const LayoutView: LayoutView.Component = React.forwardRef(
   (props, ref) => {
-    const { children, onLayout, ...restProps } = props;
+    const { children, onLayout, significantChangePercent, ...restProps } =
+      props;
 
-    const [layout, _onLayout] = useLayout({ onLayout });
+    const [layout, _onLayout] = useLayout({
+      onLayout,
+      significantChangePercent,
+    });
 
     return (
       <ViewRN ref={ref} onLayout={_onLayout} {...restProps}>
-        {children(layout)}
+        {children?.(layout)}
       </ViewRN>
     );
   },

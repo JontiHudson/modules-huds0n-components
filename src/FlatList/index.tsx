@@ -3,10 +3,10 @@ import {
   Animated,
   ListRenderItem as ListRenderItemRN,
   ListRenderItemInfo as ListRenderItemInfoRN,
+  View,
 } from 'react-native';
 
 import { FadeOverlayContainer } from '../FadeOverlay';
-import { View } from '../View';
 
 import {
   getKeyExtractor,
@@ -14,7 +14,6 @@ import {
   handleDynamicScrollLayout,
   handleZIndex,
 } from './helpers';
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace FlatList {
@@ -26,13 +25,13 @@ export namespace FlatList {
   export type ListRenderItemInfo<ItemT = any> = ListRenderItemInfoRN<ItemT>;
 }
 
-const _FlatList = React.forwardRef(
+export const FlatList = React.forwardRef(
   (props: FlatList.Props, ref: FlatList.Ref) => {
     const { numColumns, fade, style } = props;
 
     return (
       <View style={style}>
-        <View>
+        <View style={{ height: '100%', width: '100%' }}>
           {fade && <FadeOverlayContainer {...fade} />}
 
           <Animated.FlatList
@@ -51,7 +50,3 @@ const _FlatList = React.forwardRef(
     );
   },
 );
-
-export const FlatList: FlatList.Component = Object.assign(_FlatList, {
-  theming,
-});

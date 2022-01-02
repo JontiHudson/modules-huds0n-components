@@ -6,18 +6,18 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { Core } from '@huds0n/core';
-import Huds0nError from '@huds0n/error';
+import { theme } from '@huds0n/theming/src/theme';
 import { useMemo } from '@huds0n/utilities';
+import { huds0nState } from '@huds0n/utilities/src/_core';
 
 import { Badge } from '../Badge';
 import { Pressable } from '../Pressable';
+import { getVectorIcons } from '../helpers';
 
 import * as Types from './types';
-import { VectorIcons } from './VectorIcons';
 
-const DEFAULT_SIZE = Core.fontSizes.BODY;
-const DISABLED_COLOR = Core.colors.DISABLED;
+const DEFAULT_SIZE = theme.fontSizes.BODY;
+const DISABLED_COLOR = theme.colors.DISABLED;
 
 export function IconComponent(props: Types.Props) {
   const {
@@ -38,10 +38,14 @@ export function IconComponent(props: Types.Props) {
 
   return (
     <Pressable
+      // Fixes bug captures events on web when disabled
+      pointerEvents={!pressable || disabled ? 'none' : 'auto'}
       feedback="fade"
       onPress={handleOnpress(props)}
       disabled={!pressable || disabled}
       {...rest}
+      // requiresNetwork handled by handleDisabled
+      requiresNetwork={false}
       style={handleContainerStyle(props, disabled)}
     >
       {({ pressed }) => (
@@ -64,25 +68,40 @@ function handlePressable(props: Types.Props) {
   );
 }
 
-function handleDisabled(props: Types.Props, pressable: boolean) {
+function handleDisabled(
+  {
+    disabled,
+    onLongPress,
+    onPress,
+    onPressIn,
+    onPressOut,
+    requiresNetwork,
+    whilePress,
+  }: Types.Props,
+  pressable: boolean,
+) {
+  if (requiresNetwork && !huds0nState.useProp('isNetworkConnected')[0]) {
+    return true;
+  }
+
   return (
-    props.disabled ||
+    disabled ||
     (pressable &&
-      !props.onPress &&
-      !props.onPressIn &&
-      !props.onPressOut &&
-      !props.onLongPress &&
-      !props.whilePress)
+      !onPress &&
+      !onPressIn &&
+      !onPressOut &&
+      !onLongPress &&
+      !whilePress)
   );
 }
 
 function handleOnpress({ dismissInputOnPress, onPress }: Types.Props) {
   return useMemo(
     () => (event: GestureResponderEvent) => {
-      dismissInputOnPress && Core.dismissInput();
+      dismissInputOnPress && huds0nState.state.dismissInput();
       onPress && onPress(event);
     },
-    [Core.dismissInput, onPress],
+    [onPress],
   );
 }
 
@@ -194,23 +213,14 @@ function getVectorIcon(
     name,
     pressedProps,
     disabledProps,
-    size = Core.fontSizes.BODY,
-    set,
+    size = theme.fontSizes.BODY,
+    set = 'FontAwesome',
   }: Types.Props,
   disabled: boolean,
   pressed: boolean,
   color: string | undefined,
 ): React.ReactNode | undefined {
-  if (set && name) {
-    if (!VectorIcons) {
-      throw new Huds0nError({
-        name: 'icon-error',
-        code: 'VECTOR_ICONS_MISSING',
-        message: 'Please check correct vector-icons module is downloaded',
-        severity: 'HIGH',
-      });
-    }
-
+  if (name) {
     const _size =
       (disabled && disabledProps?.size) ||
       (pressed && pressedProps?.size) ||
@@ -224,7 +234,7 @@ function getVectorIcon(
     const _set =
       (disabled && disabledProps?.set) || (pressed && pressedProps?.set) || set;
 
-    const IconSet = VectorIcons[_set];
+    const IconSet = getVectorIcons()[_set];
 
     if (IconSet) {
       return <IconSet color={color} name={_name} size={_size} />;

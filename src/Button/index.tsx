@@ -8,24 +8,23 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 import { useCallback } from '@huds0n/utilities';
+import { huds0nState } from '@huds0n/utilities/src/_core';
 
 import { Pressable } from '../Pressable';
+
 import { Label } from './Label';
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace Button {
   export type OnPressFn = Props['onPress'];
   export type Props = Types.Props;
 
-  export type Component = React.FunctionComponent<Props> & {
-    theming: typeof theming;
-  };
+  export type Component = React.FunctionComponent<Props>;
 }
 
-function _Button(props: Button.Props) {
+export function Button(props: Button.Props) {
   const {
     children,
     color,
@@ -35,7 +34,7 @@ function _Button(props: Button.Props) {
     onPress,
     pressedStyle,
     spinner,
-    spinnerColor = Core.colors.WHITE,
+    spinnerColor = theme.colors.WHITE,
     spinnerStyle,
     style,
     ...restProps
@@ -47,6 +46,8 @@ function _Button(props: Button.Props) {
     <Pressable
       feedback={handleDefaultFeedback(props)}
       {...restProps}
+      // requiresNetwork handled by handleDisabled
+      requiresNetwork={false}
       onPress={handleOnPress(props)}
       disabled={disabled}
       style={handleStyle(props, disabled)}
@@ -57,24 +58,25 @@ function _Button(props: Button.Props) {
 }
 
 function handleDisabled({
-  disabled,
+  disabled: disabledProp,
   onLongPress,
   onPress,
   onPressIn,
   onPressOut,
   spinner,
-  useIsConnected,
+  requiresNetwork,
   whilePress,
 }: Types.Props) {
-  let _disabled =
-    disabled ||
+  let disabled =
+    disabledProp ||
     spinner ||
     (!onPress && !onPressIn && !onPressOut && !onLongPress && !whilePress);
 
-  if (useIsConnected) {
-    _disabled = !Core.useState('isConnected')[0].isConnected || _disabled;
+  if (requiresNetwork && !huds0nState.useProp('isNetworkConnected')[0]) {
+    return true;
   }
-  return _disabled;
+
+  return disabled;
 }
 
 function handleDefaultFeedback({ color, pressedStyle, style }: Types.Props) {
@@ -92,10 +94,10 @@ function handleDefaultFeedback({ color, pressedStyle, style }: Types.Props) {
 function handleOnPress({ dismissInputOnPress, onPress }: Types.Props) {
   return useCallback(
     (event: GestureResponderEvent) => {
-      dismissInputOnPress && Core.dismissInput();
+      dismissInputOnPress && huds0nState.state.dismissInput();
       onPress && onPress(event);
     },
-    [Core.dismissInput, onPress],
+    [onPress],
   );
 }
 
@@ -107,10 +109,6 @@ function handleContents(props: Types.Props, disabled: boolean) {
       return <ActivityIndicator color={spinnerColor} style={spinnerStyle} />;
     }
 
-    if (label || typeof children === 'string') {
-      return <Label {...props} pressed={pressed} disabled={disabled} />;
-    }
-
     if (React.isValidElement(children)) {
       <View pointerEvents="none" style={{ flex: 1 }}>
         {children}
@@ -119,6 +117,10 @@ function handleContents(props: Types.Props, disabled: boolean) {
 
     if (typeof children === 'function') {
       return children({ pressed });
+    }
+
+    if (label || typeof children === 'string') {
+      return <Label {...props} pressed={pressed} disabled={disabled} />;
     }
 
     return children;
@@ -134,11 +136,11 @@ function handleStyle(
       {
         alignItems: 'center',
         backgroundColor: color,
-        borderRadius: Core.spacings.M,
+        borderRadius: theme.spacings.M,
         borderWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
         overflow: 'hidden',
-        padding: Core.spacings.M,
+        padding: theme.spacings.M,
       },
       style,
       pressed && pressedStyle,
@@ -146,5 +148,3 @@ function handleStyle(
     ]);
   };
 }
-
-export const Button = Object.assign(_Button, { theming });

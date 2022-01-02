@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import { Button, Icon, ScrollView, View } from '@huds0n/components';
+import { Button, Icon, ScrollView } from '@huds0n/components';
 
 export default function Components() {
   const [badge, setBadge] = useState(0);
