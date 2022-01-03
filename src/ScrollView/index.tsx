@@ -1,27 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
 
-import { ScrollViewComponent } from './Component';
-import { FadeOverlayContainer } from '../FadeOverlay';
+import { ScrollViewComponent } from "./Component";
 
-import * as Types from './types';
+import * as Types from "./types";
 
 export namespace ScrollView {
-  export type FadeProp = Types.FadeProp;
-
   export type Props = Types.Props;
 
   export type Component = Types.Component;
 }
 
 export const ScrollView: Types.Component = React.forwardRef((props, ref) => {
-  const { fade, style } = props;
-
-  return (
-    <>
-      {fade && <FadeOverlayContainer {...fade} />}
-
-      <ScrollViewComponent ref={ref} {...props} style={style} />
-    </>
-  );
+  return <ScrollViewComponent ref={ref} {...props} />;
 });

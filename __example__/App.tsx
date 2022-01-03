@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import { Button, Icon, ScrollView } from '@huds0n/components';
+import { Button, Icon, ScrollView } from "@huds0n/components";
 
 export default function Components() {
   const [badge, setBadge] = useState(0);
@@ -9,13 +9,12 @@ export default function Components() {
   const incrementBadge = () => setBadge(badge + 1);
 
   const onClick = () => {
-    console.log('Pressed');
+    console.log("Pressed");
   };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <ScrollView
-        fade={{ bottom: true }}
         contentContainerStyle={styles.scrollViewContainer}
         style={styles.scrollView}
       >
@@ -60,7 +59,7 @@ export default function Components() {
             </Button>
           </View>
           <View style={styles.buttonContainer}>
-            <Text>Text will automatically reduce</Text>
+            <Text>Text will automatically reduce on ios and android</Text>
             <Button
               feedback="fade"
               onPress={onClick}
@@ -100,8 +99,8 @@ export default function Components() {
                 <Icon
                   name={
                     pressed
-                      ? 'cursor-default-click'
-                      : 'cursor-default-click-outline'
+                      ? "cursor-default-click"
+                      : "cursor-default-click-outline"
                   }
                   set="MaterialCommunityIcons"
                   badge={badge}
@@ -122,10 +121,10 @@ export default function Components() {
 }
 
 const colors = {
-  BLUE: 'lightblue',
-  GREY: 'grey',
-  RED: 'red',
-  WHITE: 'white',
+  BLUE: "lightblue",
+  GREY: "grey",
+  RED: "red",
+  WHITE: "white",
 };
 
 const styles = StyleSheet.create({
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonColored: {
     backgroundColor: colors.BLUE,
@@ -158,12 +157,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
+    height: "100%",
+    width: "100%",
   },
   scrollViewContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
+    justifyContent: "center",
   },
 });

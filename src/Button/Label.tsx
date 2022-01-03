@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, Text } from "react-native";
 
-import { theme } from '@huds0n/theming/src/theme';
+import { theme } from "@huds0n/theming/src/theme";
 
-import * as Types from './types';
+import * as Types from "./types";
 
 export function Label(props: Types.LabelProps) {
   const labelText = getLabelText(props);
@@ -22,7 +22,7 @@ export function Label(props: Types.LabelProps) {
 }
 
 function getLabelText({ children, label }: Types.LabelProps) {
-  return typeof children === 'string' ? children : label;
+  return typeof children === "string" ? children : label;
 }
 
 function handleLabelStyle({
