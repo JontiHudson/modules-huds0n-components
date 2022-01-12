@@ -1,37 +1,15 @@
-import React from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 
-import { theme } from '@huds0n/theming/src/theme';
-import { useMemo } from '@huds0n/utilities';
+import { theme } from "@huds0n/theming/src/theme";
+import { useMemo } from "@huds0n/utilities";
+
+import type { Types } from "../types";
 
 const DEFAULT_SIZE = 14;
 const DEFAULT_MAX_VALUE = 9;
 
-export namespace Badge {
-  export type Offset = { x?: number; y?: number };
-
-  export type Props = {
-    color?: string;
-    containerStyle?: StyleProp<ViewStyle>;
-    maxValue?: number;
-    offset?: Offset;
-    size?: number;
-    textColor?: string;
-    textStyle?: StyleProp<TextStyle>;
-    value: number;
-  };
-
-  export type Component = React.FunctionComponent<Props>;
-}
-
-export function Badge(props: Badge.Props) {
+export function Badge(props: Types.BadgeProps) {
   const Contents = handleBadgeContents(props);
 
   if (!props.value) return null;
@@ -44,16 +22,16 @@ function handleStyle({
   containerStyle,
   offset,
   size = DEFAULT_SIZE,
-}: Badge.Props): ViewStyle {
+}: Types.BadgeProps): ViewStyle {
   return StyleSheet.flatten([
     {
-      alignContent: 'center',
+      alignContent: "center",
       backgroundColor: color,
       borderRadius: size / 2,
       padding: size / 10,
       height: size,
-      justifyContent: 'center',
-      position: 'absolute',
+      justifyContent: "center",
+      position: "absolute",
       width: size,
       transform: [
         { translateX: offset?.x || 0 },
@@ -70,12 +48,12 @@ function handleBadgeContents({
   textStyle,
   size = DEFAULT_SIZE,
   value,
-}: Badge.Props) {
+}: Types.BadgeProps) {
   return useMemo(() => {
     if (!value) return null;
 
     const text =
-      value > maxValue ? maxValue.toFixed(0) + '+' : value.toFixed(0);
+      value > maxValue ? maxValue.toFixed(0) + "+" : value.toFixed(0);
 
     return (
       <Text
@@ -85,8 +63,8 @@ function handleBadgeContents({
           {
             color: textColor,
             fontSize: size * (text.length > 1 ? 0.6 : 0.8),
-            fontWeight: '300',
-            textAlign: 'center',
+            fontWeight: "300",
+            textAlign: "center",
           },
           textStyle,
         ])}

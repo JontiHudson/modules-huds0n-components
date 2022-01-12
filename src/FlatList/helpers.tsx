@@ -1,5 +1,5 @@
-import React from 'react';
-import { ListRenderItemInfo, RefreshControl, View } from 'react-native';
+import React from "react";
+import { ListRenderItemInfo, RefreshControl, View } from "react-native";
 
 import {
   useAsyncCallback,
@@ -8,11 +8,14 @@ import {
   useMemo,
   useRef,
   useState,
-} from '@huds0n/utilities';
+} from "@huds0n/utilities";
 
-import * as Types from './types';
+import type { Types } from "../types";
 
-export function getKeyExtractor({ keyName, keyExtractor }: Types.Props) {
+export function getKeyExtractor({
+  keyName,
+  keyExtractor,
+}: Types.FlatListProps) {
   return { keyExtractor: keyName ? useKeyExtractor(keyName) : keyExtractor };
 }
 
@@ -20,7 +23,7 @@ export function getRefreshControl({
   activityIndicatorColor,
   onPullToRefresh,
   refreshControl,
-}: Types.Props) {
+}: Types.FlatListProps) {
   const [handlePullToRefresh, refreshing] = useAsyncCallback(async () => {
     await onPullToRefresh?.();
   }, [onPullToRefresh]);
@@ -36,7 +39,7 @@ export function getRefreshControl({
       ) : (
         refreshControl
       ),
-    [activityIndicatorColor, onPullToRefresh, refreshing, refreshControl],
+    [activityIndicatorColor, onPullToRefresh, refreshing, refreshControl]
   );
 
   return {
@@ -50,7 +53,7 @@ export function handleDynamicScrollLayout({
   onPullToRefresh,
   refreshControl,
   scrollEnabled = true,
-}: Types.Props) {
+}: Types.FlatListProps) {
   const dynamicScrollingEnabled = !onPullToRefresh && !refreshControl;
 
   const [_scrollEnabled, _setScrollEnabled] = useState(false);
@@ -79,7 +82,7 @@ export function handleDynamicScrollLayout({
         }, 0);
       }
     },
-    [dynamicScrollingEnabled],
+    [dynamicScrollingEnabled]
   );
 
   const _onLayout: typeof onLayout = useCallback(
@@ -87,7 +90,7 @@ export function handleDynamicScrollLayout({
       onLayout?.(event);
       handleChange(containerHeightRef, event.nativeEvent.layout.height);
     },
-    [dynamicScrollingEnabled, onLayout],
+    [dynamicScrollingEnabled, onLayout]
   );
 
   const handleContentSizeChange: typeof onContentSizeChange = useCallback(
@@ -95,7 +98,7 @@ export function handleDynamicScrollLayout({
       onContentSizeChange?.(width, height);
       handleChange(contentsHeightRef, height);
     },
-    [dynamicScrollingEnabled, onContentSizeChange],
+    [dynamicScrollingEnabled, onContentSizeChange]
   );
 
   return {
@@ -109,7 +112,7 @@ export function handleDynamicScrollLayout({
 export function handleZIndex({
   CellRendererComponent = View,
   reverseZIndex,
-}: Types.Props) {
+}: Types.FlatListProps) {
   if (reverseZIndex) {
     return {
       CellRendererComponent: (info: ListRenderItemInfo<any>) => (

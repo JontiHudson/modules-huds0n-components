@@ -1,15 +1,19 @@
 import React from "react";
+import { ScrollView as ScrollViewRN } from "react-native";
 
-import { ScrollViewComponent } from "./Component";
+import type { Types } from "../types";
 
-import * as Types from "./types";
-
-export namespace ScrollView {
-  export type Props = Types.Props;
-
-  export type Component = Types.Component;
-}
-
-export const ScrollView: Types.Component = React.forwardRef((props, ref) => {
-  return <ScrollViewComponent ref={ref} {...props} />;
-});
+export const ScrollView = React.forwardRef<ScrollViewRN, Types.ScrollViewProps>(
+  (props, ref) => {
+    return (
+      <ScrollViewRN
+        ref={ref}
+        overScrollMode="never"
+        keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="always"
+        {...props}
+        style={undefined}
+      />
+    );
+  }
+);

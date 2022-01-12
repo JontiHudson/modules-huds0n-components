@@ -5,22 +5,7 @@ import { theme } from "@huds0n/theming/src/theme";
 import { addColorTransparency, useMemo } from "@huds0n/utilities";
 
 import { getLinearGradient } from "../helpers";
-
-export namespace FadeOverlay {
-  export type Position = "TOP" | "BOTTOM" | "LEFT" | "RIGHT";
-
-  export type Props = {
-    color?: string;
-    enable?: boolean;
-    height?: number | string;
-    width?: number | string;
-    intensity?: number;
-    position?: Position;
-    absolute?: boolean;
-  };
-
-  export type Component = React.FunctionComponent<FadeOverlay.Props>;
-}
+import type { Types } from "../types";
 
 export function FadeOverlay({
   color = theme.colors.BACKGROUND,
@@ -30,7 +15,7 @@ export function FadeOverlay({
   height,
   width,
   absolute = true,
-}: FadeOverlay.Props) {
+}: Types.FadeOverlayProps) {
   const LinearGradient = getLinearGradient();
 
   const [gradientProps, positionStyle] = useMemo(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -6,25 +6,18 @@ import {
   StyleSheet,
   View,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 
-import { theme } from '@huds0n/theming/src/theme';
-import { useCallback } from '@huds0n/utilities';
-import { huds0nState } from '@huds0n/utilities/src/_core';
+import { theme } from "@huds0n/theming/src/theme";
+import { useCallback } from "@huds0n/utilities";
+import { huds0nState } from "@huds0n/utilities/src/_core";
 
-import { Pressable } from '../Pressable';
+import { Pressable } from "../Pressable";
 
-import { Label } from './Label';
-import * as Types from './types';
+import { Label } from "./Label";
+import type { Types } from "../types";
 
-export namespace Button {
-  export type OnPressFn = Props['onPress'];
-  export type Props = Types.Props;
-
-  export type Component = React.FunctionComponent<Props>;
-}
-
-export function Button(props: Button.Props) {
+export function Button(props: Types.ButtonProps) {
   const {
     children,
     color,
@@ -66,42 +59,49 @@ function handleDisabled({
   spinner,
   requiresNetwork,
   whilePress,
-}: Types.Props) {
+}: Types.ButtonProps) {
   let disabled =
     disabledProp ||
     spinner ||
     (!onPress && !onPressIn && !onPressOut && !onLongPress && !whilePress);
 
-  if (requiresNetwork && !huds0nState.useProp('isNetworkConnected')[0]) {
+  if (requiresNetwork && !huds0nState.useProp("isNetworkConnected")[0]) {
     return true;
   }
 
   return disabled;
 }
 
-function handleDefaultFeedback({ color, pressedStyle, style }: Types.Props) {
+function handleDefaultFeedback({
+  color,
+  pressedStyle,
+  style,
+}: Types.ButtonProps) {
   if (pressedStyle && StyleSheet.flatten(pressedStyle)?.backgroundColor) {
     return undefined;
   }
 
-  if (color || (style && StyleSheet.flatten(style)?.backgroundColor)) {
-    return 'highlight';
+  if (
+    color ||
+    (typeof style !== "function" && StyleSheet.flatten(style)?.backgroundColor)
+  ) {
+    return "highlight";
   }
 
-  return 'fade';
+  return "fade";
 }
 
-function handleOnPress({ dismissInputOnPress, onPress }: Types.Props) {
+function handleOnPress({ dismissInputOnPress, onPress }: Types.ButtonProps) {
   return useCallback(
     (event: GestureResponderEvent) => {
       dismissInputOnPress && huds0nState.state.dismissInput();
       onPress && onPress(event);
     },
-    [onPress],
+    [onPress]
   );
 }
 
-function handleContents(props: Types.Props, disabled: boolean) {
+function handleContents(props: Types.ButtonProps, disabled: boolean) {
   const { children, spinner, spinnerColor, spinnerStyle, label } = props;
 
   return ({ pressed }: PressableStateCallbackType) => {
@@ -115,11 +115,11 @@ function handleContents(props: Types.Props, disabled: boolean) {
       </View>;
     }
 
-    if (typeof children === 'function') {
+    if (typeof children === "function") {
       return children({ pressed });
     }
 
-    if (label || typeof children === 'string') {
+    if (label || typeof children === "string") {
       return <Label {...props} pressed={pressed} disabled={disabled} />;
     }
 
@@ -128,21 +128,21 @@ function handleContents(props: Types.Props, disabled: boolean) {
 }
 
 function handleStyle(
-  { color, disabledStyle, pressedStyle, style }: Types.Props,
-  disabled: boolean,
+  { color, disabledStyle, pressedStyle, style }: Types.ButtonProps,
+  disabled: boolean
 ) {
   return ({ pressed }: PressableStateCallbackType): ViewStyle => {
     return StyleSheet.flatten([
       {
-        alignItems: 'center',
+        alignItems: "center",
         backgroundColor: color,
         borderRadius: theme.spacings.M,
         borderWidth: StyleSheet.hairlineWidth,
-        justifyContent: 'center',
-        overflow: 'hidden',
+        justifyContent: "center",
+        overflow: "hidden",
         padding: theme.spacings.M,
       },
-      style,
+      typeof style === "function" ? style({ pressed }) : style,
       pressed && pressedStyle,
       disabled && disabledStyle,
     ]);

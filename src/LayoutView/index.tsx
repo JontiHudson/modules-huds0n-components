@@ -1,22 +1,11 @@
-import React from 'react';
-import { View as ViewRN, ViewProps as ViewPropsRN } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { useLayout } from '@huds0n/utilities';
+import { useLayout } from "@huds0n/utilities";
 
-export namespace LayoutView {
-  export type Layout = useLayout.Layout;
+import type { Types } from "../types";
 
-  export type Props = Omit<ViewPropsRN, 'children'> & {
-    children?: (layout: Layout) => React.ReactNode | React.ReactNode[];
-    significantChangePercent?: number;
-  };
-
-  export type Component = React.ForwardRefExoticComponent<
-    Props & React.RefAttributes<ViewRN>
-  >;
-}
-
-export const LayoutView: LayoutView.Component = React.forwardRef(
+export const LayoutView = React.forwardRef<View, Types.LayoutViewProps>(
   (props, ref) => {
     const { children, onLayout, significantChangePercent, ...restProps } =
       props;
@@ -27,9 +16,9 @@ export const LayoutView: LayoutView.Component = React.forwardRef(
     });
 
     return (
-      <ViewRN ref={ref} onLayout={_onLayout} {...restProps}>
+      <View ref={ref} onLayout={_onLayout} {...restProps}>
         {children?.(layout)}
-      </ViewRN>
+      </View>
     );
-  },
+  }
 );

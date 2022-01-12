@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 import {
   LayoutChangeEvent,
   NativeSyntheticEvent,
   NativeScrollEvent,
   ScrollView as ScrollViewRN,
   View,
-} from 'react-native';
+} from "react-native";
 
 import {
   useCallback,
@@ -13,13 +13,13 @@ import {
   useEffect,
   useRef,
   useState,
-} from '@huds0n/utilities';
-import { huds0nState } from '@huds0n/utilities/src/_core';
+} from "@huds0n/utilities";
+import { huds0nState } from "@huds0n/utilities/src/_core";
 
-import { scrollToFocus } from './helpers';
-import * as Types from './types';
+import { scrollToFocus } from "./helpers";
+import type { Types } from "../types";
 
-export const ScrollViewComponent: Types.Component = React.forwardRef(
+export const ScrollView = React.forwardRef<ScrollViewRN, Types.ScrollViewProps>(
   (props, ref) => {
     const {
       contentContainerStyle,
@@ -31,7 +31,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
       ...restProps
     } = props;
 
-    const [focusedId] = huds0nState.useProp('focusedId');
+    const [focusedId] = huds0nState.useProp("focusedId");
 
     const [scrollEnabled, setScrollEnabled] = useState(false);
 
@@ -46,7 +46,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
           scrollRef.current,
           focusedId as number,
           inputPadding,
-          scrollPositionRef.current,
+          scrollPositionRef.current
         );
       }
     }, [focusedId, inputPadding, scrollRef.current]);
@@ -56,7 +56,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
         onScroll?.(event);
         scrollPositionRef.current = event.nativeEvent.contentOffset.y;
       },
-      [onScroll],
+      [onScroll]
     );
 
     const handleScrollEnable = useCallback(() => {
@@ -80,7 +80,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
         containerLength.current = horizontal ? width : height;
         handleScrollEnable();
       },
-      [handleScrollEnable],
+      [handleScrollEnable]
     );
 
     const handleLayoutScrollContainer = useCallback(
@@ -97,7 +97,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
             scrollRef.current,
             focusedId as number,
             inputPadding,
-            scrollPositionRef.current,
+            scrollPositionRef.current
           );
         }
       },
@@ -107,7 +107,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
         scrollRef.current,
         handleScrollEnable,
         scrollPositionRef.current,
-      ],
+      ]
     );
 
     return (
@@ -125,7 +125,7 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
         >
           <View
             style={[
-              { flexDirection: horizontal ? 'row' : 'column' },
+              { flexDirection: horizontal ? "row" : "column" },
               contentContainerStyle,
             ]}
             onLayout={handleLayoutScrollContainer}
@@ -135,5 +135,5 @@ export const ScrollViewComponent: Types.Component = React.forwardRef(
         </ScrollViewRN>
       </View>
     );
-  },
+  }
 );

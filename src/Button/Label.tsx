@@ -3,9 +3,10 @@ import { StyleSheet, Text } from "react-native";
 
 import { theme } from "@huds0n/theming/src/theme";
 
-import * as Types from "./types";
+import type { Types } from "../types";
 
-export function Label(props: Types.LabelProps) {
+type LabelProps = Types.ButtonProps & { pressed: boolean };
+export function Label(props: LabelProps) {
   const labelText = getLabelText(props);
 
   if (!labelText) return null;
@@ -21,7 +22,7 @@ export function Label(props: Types.LabelProps) {
   );
 }
 
-function getLabelText({ children, label }: Types.LabelProps) {
+function getLabelText({ children, label }: LabelProps) {
   return typeof children === "string" ? children : label;
 }
 
@@ -31,7 +32,7 @@ function handleLabelStyle({
   labelStyle,
   pressed,
   pressedLabelStyle,
-}: Types.LabelProps) {
+}: LabelProps) {
   return StyleSheet.flatten([
     { color: theme.colors.TEXT, fontSize: theme.fontSizes.LABEL },
     labelStyle,

@@ -1,12 +1,10 @@
-import React from 'react';
+import React from "react";
 import {
   Platform,
   Pressable as PressableRN,
-  PressableAndroidRippleConfig,
-  PressableProps as PressablePropsRN,
   StyleSheet,
-  View as ViewRN,
-} from 'react-native';
+  View,
+} from "react-native";
 
 import {
   darkenColor,
@@ -15,55 +13,28 @@ import {
   useCallback,
   useMemo,
   useRef,
-} from '@huds0n/utilities';
-import { huds0nState } from '@huds0n/utilities/src/_core';
+} from "@huds0n/utilities";
+import { huds0nState } from "@huds0n/utilities/src/_core";
 
-import * as Types from '../types';
+import type { Types } from "../types";
 
-export namespace Pressable {
-  export type AndroidRipple = boolean | PressableAndroidRippleConfig;
+export const Pressable = React.forwardRef<View, Types.PressableProps>(
+  (props, ref) => {
+    return (
+      <PressableRN
+        ref={ref}
+        {...props}
+        disabled={handleDisabled(props)}
+        {...handlePress(props)}
+        android_ripple={handleAndroidRipple(props)}
+        style={handleStyle(props)}
+      />
+    );
+  }
+);
 
-  export type FeedBack = 'fade' | 'highlight' | 'none';
-
-  export type OnPressFn = Types.OnPressFn;
-
-  export type Style = PressablePropsRN['style'];
-
-  export type Props = Omit<
-    PressablePropsRN,
-    'android_ripple' | 'onPress' | 'style'
-  > & {
-    android_ripple?: AndroidRipple;
-    feedback?: FeedBack;
-    feedbackIntensity?: number;
-    onPress?: OnPressFn;
-    whilePress?: () => () => void;
-    style?: Style;
-    requiresNetwork?: boolean;
-  };
-
-  export type Ref = typeof ViewRN;
-
-  export type Component = React.ForwardRefExoticComponent<
-    Pressable.Props & React.RefAttributes<ViewRN>
-  >;
-}
-
-export const Pressable: Pressable.Component = React.forwardRef((props, ref) => {
-  return (
-    <PressableRN
-      ref={ref}
-      {...props}
-      disabled={handleDisabled(props)}
-      {...handlePress(props)}
-      android_ripple={handleAndroidRipple(props)}
-      style={handleStyle(props)}
-    />
-  );
-});
-
-function handleDisabled({ disabled, requiresNetwork }: Pressable.Props) {
-  if (requiresNetwork && !huds0nState.useProp('isNetworkConnected')[0]) {
+function handleDisabled({ disabled, requiresNetwork }: Types.PressableProps) {
+  if (requiresNetwork && !huds0nState.useProp("isNetworkConnected")[0]) {
     return true;
   }
 
@@ -73,12 +44,12 @@ function handleDisabled({ disabled, requiresNetwork }: Pressable.Props) {
 function highlightColor(color: string, amount?: number) {
   const highlightedColor = darkenColor(color, amount);
 
-  return highlightedColor?.startsWith('#000000')
+  return highlightedColor?.startsWith("#000000")
     ? lightenColor(color, amount)
     : highlightedColor;
 }
 
-function handlePress(props: Pressable.Props) {
+function handlePress(props: Types.PressableProps) {
   const pressCleanUpFn = useRef<null | (() => void)>(null);
 
   const onPress = props.onPress || undefined;
@@ -89,7 +60,7 @@ function handlePress(props: Pressable.Props) {
 
       pressCleanUpFn.current = props.whilePress?.() || null;
     },
-    [props.onPressIn],
+    [props.onPressIn]
   );
 
   const onPressOut: typeof props.onPressOut = useCallback(
@@ -99,7 +70,7 @@ function handlePress(props: Pressable.Props) {
       pressCleanUpFn.current?.();
       pressCleanUpFn.current = null;
     },
-    [props.onPressOut],
+    [props.onPressOut]
   );
 
   return { onPress, onPressIn, onPressOut };
@@ -109,23 +80,23 @@ function handleAndroidRipple({
   android_ripple,
   feedbackIntensity,
   style,
-}: Pressable.Props) {
+}: Types.PressableProps) {
   return useMemo(() => {
-    if (Platform.OS === 'android' && android_ripple) {
-      if (typeof android_ripple === 'object' && android_ripple.color) {
+    if (Platform.OS === "android" && android_ripple) {
+      if (typeof android_ripple === "object" && android_ripple.color) {
         return android_ripple;
       }
 
       const _android_ripple = android_ripple === true ? {} : android_ripple;
 
       const { backgroundColor } = StyleSheet.flatten(
-        typeof style === 'function' ? style({ pressed: false }) : style,
+        typeof style === "function" ? style({ pressed: false }) : style
       );
 
       return {
         ..._android_ripple,
         color:
-          typeof backgroundColor === 'string'
+          typeof backgroundColor === "string"
             ? highlightColor(backgroundColor, feedbackIntensity)
             : undefined,
       };
@@ -133,7 +104,7 @@ function handleAndroidRipple({
   }, [android_ripple, feedbackIntensity, style]);
 }
 
-function handleStyle(props: Pressable.Props) {
+function handleStyle(props: Types.PressableProps) {
   const { android_ripple, feedback, feedbackIntensity, style } = props;
 
   return useMemo(() => {
@@ -141,7 +112,7 @@ function handleStyle(props: Pressable.Props) {
       return style;
     }
 
-    if (feedback === 'fade') {
+    if (feedback === "fade") {
       return getFadeFeedbackStyle(props);
     }
 
@@ -149,22 +120,28 @@ function handleStyle(props: Pressable.Props) {
   }, [android_ripple, feedback, feedbackIntensity, style]);
 }
 
-function noPressStyleRequired({ android_ripple, feedback }: Pressable.Props) {
+function noPressStyleRequired({
+  android_ripple,
+  feedback,
+}: Types.PressableProps) {
   return (
     !feedback ||
-    feedback === 'none' ||
-    (Platform.OS === 'android' && android_ripple)
+    feedback === "none" ||
+    (Platform.OS === "android" && android_ripple)
   );
 }
 
-function getFadeFeedbackStyle({ feedbackIntensity, style }: Pressable.Props) {
+function getFadeFeedbackStyle({
+  feedbackIntensity,
+  style,
+}: Types.PressableProps) {
   return flattenPressableStyle([
     style,
     ({ pressed }) =>
       pressed
         ? {
             opacity:
-              typeof feedbackIntensity === 'number' ? feedbackIntensity : 0.2,
+              typeof feedbackIntensity === "number" ? feedbackIntensity : 0.2,
           }
         : {},
   ]);
@@ -173,13 +150,13 @@ function getFadeFeedbackStyle({ feedbackIntensity, style }: Pressable.Props) {
 function getHighlightFeedbackStyle({
   feedbackIntensity,
   style,
-}: Pressable.Props) {
+}: Types.PressableProps) {
   const { backgroundColor } = StyleSheet.flatten(
-    typeof style === 'function' ? style({ pressed: false }) : style,
+    typeof style === "function" ? style({ pressed: false }) : style
   );
 
   const activeColor =
-    typeof backgroundColor === 'string'
+    typeof backgroundColor === "string"
       ? highlightColor(backgroundColor, feedbackIntensity || 10)
       : undefined;
 
