@@ -13,7 +13,7 @@ const helpers_1 = require("../helpers");
 const DEFAULT_SIZE = theme_1.theme.fontSizes.BODY;
 const DISABLED_COLOR = theme_1.theme.colors.DISABLED;
 function Icon(props) {
-    const { backgroundColor, badge = 0, badgeProps, color, containerStyle, disabledProps, dismissInputOnPress = true, onPress, pressedProps, ...rest } = props;
+    const { backgroundColor, badge = 0, badgeProps, color, containerStyle, disabledProps, dismissInputOnPress = true, onPress, pressedProps } = props, rest = (0, tslib_1.__rest)(props, ["backgroundColor", "badge", "badgeProps", "color", "containerStyle", "disabledProps", "dismissInputOnPress", "onPress", "pressedProps"]);
     const pressable = handlePressable(props);
     const disabled = handleDisabled(props, pressable);
     return (<Pressable_1.Pressable pointerEvents={!pressable || disabled ? "none" : "auto"} feedback="fade" onPress={handleOnpress(props)} disabled={!pressable || disabled} {...rest} requiresNetwork={false} style={handleContainerStyle(props, disabled)}>
@@ -51,7 +51,7 @@ function handleOnpress({ dismissInputOnPress, onPress }) {
 }
 function handleContainerStyle({ backgroundColor, containerStyle, disabledProps, pressedProps, }, disabled) {
     return ({ pressed }) => {
-        const containerColor = (disabled && disabledProps?.backgroundColor) || backgroundColor;
+        const containerColor = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.backgroundColor)) || backgroundColor;
         return react_native_1.StyleSheet.flatten([
             {
                 alignItems: "center",
@@ -60,16 +60,16 @@ function handleContainerStyle({ backgroundColor, containerStyle, disabledProps, 
             },
             containerStyle,
             pressed &&
-                !!pressedProps?.backgroundColor && {
-                backgroundColor: pressedProps?.backgroundColor,
+                !!(pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.backgroundColor) && {
+                backgroundColor: pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.backgroundColor,
             },
         ]);
     };
 }
 function handleIconComponent(props, disabled, pressed) {
     const { color, disabledProps, pressedProps } = props;
-    const _color = (disabled && (disabledProps?.color || DISABLED_COLOR)) ||
-        (pressed && pressedProps?.color) ||
+    const _color = (disabled && ((disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.color) || DISABLED_COLOR)) ||
+        (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.color)) ||
         color;
     return (getVectorIcon(props, disabled, pressed, _color) ||
         getImageIcon(props, disabled, pressed, _color) ||
@@ -77,43 +77,39 @@ function handleIconComponent(props, disabled, pressed) {
 }
 function getCustomIcon({ component, disabledProps, pressedProps }, disabled, pressed) {
     if (component) {
-        return ((disabled && disabledProps?.component) ||
-            (pressed && pressedProps?.component) ||
+        return ((disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.component)) ||
+            (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.component)) ||
             component);
     }
 }
 function getImageIcon({ imageProps, source, pressedProps, disabledProps, size = DEFAULT_SIZE, }, disabled, pressed, color) {
     if (source) {
-        const _size = (disabled && disabledProps?.size) ||
-            (pressed && pressedProps?.size) ||
+        const _size = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.size)) ||
+            (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.size)) ||
             size;
-        const _source = (disabled && disabledProps?.source) ||
-            (pressed && pressedProps?.source) ||
+        const _source = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.source)) ||
+            (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.source)) ||
             source;
-        const _imageProps = {
-            ...imageProps,
-            ...(disabled && disabledProps?.imageProps),
-            ...(pressed && pressedProps?.imageProps),
-        };
+        const _imageProps = Object.assign(Object.assign(Object.assign({}, imageProps), (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.imageProps))), (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.imageProps)));
         return (<react_native_1.Image resizeMode="contain" source={_source} {..._imageProps} style={react_native_1.StyleSheet.flatten([
                 {
                     height: _size,
                     width: _size,
                     tintColor: color,
                 },
-                _imageProps?.style,
+                _imageProps === null || _imageProps === void 0 ? void 0 : _imageProps.style,
             ])}/>);
     }
 }
 function getVectorIcon({ name, pressedProps, disabledProps, size = theme_1.theme.fontSizes.BODY, set = "FontAwesome", }, disabled, pressed, color) {
     if (name) {
-        const _size = (disabled && disabledProps?.size) ||
-            (pressed && pressedProps?.size) ||
+        const _size = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.size)) ||
+            (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.size)) ||
             size;
-        const _name = (disabled && disabledProps?.name) ||
-            (pressed && pressedProps?.name) ||
+        const _name = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.name)) ||
+            (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.name)) ||
             name;
-        const _set = (disabled && disabledProps?.set) || (pressed && pressedProps?.set) || set;
+        const _set = (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.set)) || (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.set)) || set;
         const IconSet = (0, helpers_1.getVectorIcons)()[_set];
         if (IconSet) {
             return <IconSet color={color} name={_name} size={_size}/>;
@@ -124,9 +120,5 @@ function handleBadgeComponent({ badge, badgeProps, color, disabledProps, pressed
     if (!badge) {
         return null;
     }
-    return (<Badge_1.Badge offset={{ x: size / 3, y: -size / 3 }} size={size / 2} textColor={color} value={badge} {...{
-        ...badgeProps,
-        ...(disabled && disabledProps?.badgeProps),
-        ...(pressed && pressedProps?.badgeProps),
-    }}/>);
+    return (<Badge_1.Badge offset={{ x: size / 3, y: -size / 3 }} size={size / 2} textColor={color} value={badge} {...Object.assign(Object.assign(Object.assign({}, badgeProps), (disabled && (disabledProps === null || disabledProps === void 0 ? void 0 : disabledProps.badgeProps))), (pressed && (pressedProps === null || pressedProps === void 0 ? void 0 : pressedProps.badgeProps)))}/>);
 }

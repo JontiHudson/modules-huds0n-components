@@ -4,4 +4,4 @@ exports.ExpoLinearGradient = void 0;
 try {
     exports.ExpoLinearGradient = require("expo-linear-gradient").LinearGradient;
 }
-catch { }
+catch (_a) { }

@@ -20,4 +20,4 @@ try {
             .default,
     };
 }
-catch { }
+catch (_a) { }

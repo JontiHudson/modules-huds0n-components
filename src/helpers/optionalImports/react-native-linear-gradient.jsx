@@ -4,4 +4,4 @@ exports.LinearGradientRN = void 0;
 try {
     exports.LinearGradientRN = require("react-native-web-linear-gradient").default;
 }
-catch { }
+catch (_a) { }

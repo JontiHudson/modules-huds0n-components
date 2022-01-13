@@ -27,8 +27,8 @@ function handleStyle({ color = theme_1.theme.colors.BADGE, containerStyle, offse
             position: "absolute",
             width: size,
             transform: [
-                { translateX: offset?.x || 0 },
-                { translateY: offset?.y || 0 },
+                { translateX: (offset === null || offset === void 0 ? void 0 : offset.x) || 0 },
+                { translateY: (offset === null || offset === void 0 ? void 0 : offset.y) || 0 },
             ],
         },
         containerStyle,

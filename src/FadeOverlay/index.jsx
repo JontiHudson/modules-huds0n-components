@@ -56,11 +56,7 @@ function FadeOverlay({ color = theme_1.theme.colors.BACKGROUND, enable = true, p
         }
         return array;
     }, [color]);
-    return (<react_native_1.View style={{
-            position: absolute ? "absolute" : "relative",
-            zIndex: 1000,
-            ...positionStyle,
-        }}>
+    return (<react_native_1.View style={Object.assign({ position: absolute ? "absolute" : "relative", zIndex: 1000 }, positionStyle)}>
       {enable && gradients}
     </react_native_1.View>);
 }

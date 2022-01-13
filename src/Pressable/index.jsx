@@ -17,7 +17,7 @@ function handleDisabled({ disabled, requiresNetwork }) {
 }
 function highlightColor(color, amount) {
     const highlightedColor = (0, utilities_1.darkenColor)(color, amount);
-    return highlightedColor?.startsWith("#000000")
+    return (highlightedColor === null || highlightedColor === void 0 ? void 0 : highlightedColor.startsWith("#000000"))
         ? (0, utilities_1.lightenColor)(color, amount)
         : highlightedColor;
 }
@@ -25,12 +25,14 @@ function handlePress(props) {
     const pressCleanUpFn = (0, utilities_1.useRef)(null);
     const onPress = props.onPress || undefined;
     const onPressIn = (0, utilities_1.useCallback)((event) => {
-        props.onPressIn?.(event);
-        pressCleanUpFn.current = props.whilePress?.() || null;
+        var _a, _b;
+        (_a = props.onPressIn) === null || _a === void 0 ? void 0 : _a.call(props, event);
+        pressCleanUpFn.current = ((_b = props.whilePress) === null || _b === void 0 ? void 0 : _b.call(props)) || null;
     }, [props.onPressIn]);
     const onPressOut = (0, utilities_1.useCallback)((event) => {
-        props.onPressOut?.(event);
-        pressCleanUpFn.current?.();
+        var _a, _b;
+        (_a = props.onPressOut) === null || _a === void 0 ? void 0 : _a.call(props, event);
+        (_b = pressCleanUpFn.current) === null || _b === void 0 ? void 0 : _b.call(pressCleanUpFn);
         pressCleanUpFn.current = null;
     }, [props.onPressOut]);
     return { onPress, onPressIn, onPressOut };
@@ -43,12 +45,9 @@ function handleAndroidRipple({ android_ripple, feedbackIntensity, style, }) {
             }
             const _android_ripple = android_ripple === true ? {} : android_ripple;
             const { backgroundColor } = react_native_1.StyleSheet.flatten(typeof style === "function" ? style({ pressed: false }) : style);
-            return {
-                ..._android_ripple,
-                color: typeof backgroundColor === "string"
+            return Object.assign(Object.assign({}, _android_ripple), { color: typeof backgroundColor === "string"
                     ? highlightColor(backgroundColor, feedbackIntensity)
-                    : undefined,
-            };
+                    : undefined });
         }
     }, [android_ripple, feedbackIntensity, style]);
 }

@@ -8,7 +8,7 @@ const utilities_1 = require("@huds0n/utilities");
 const _core_1 = require("@huds0n/utilities/src/_core");
 const helpers_1 = require("./helpers");
 exports.ScrollView = react_1.default.forwardRef((props, ref) => {
-    const { contentContainerStyle, children, onScroll, inputPadding = 20, scrollEnabled: propsScrollEnabled = true, horizontal, ...restProps } = props;
+    const { contentContainerStyle, children, onScroll, inputPadding = 20, scrollEnabled: propsScrollEnabled = true, horizontal } = props, restProps = (0, tslib_1.__rest)(props, ["contentContainerStyle", "children", "onScroll", "inputPadding", "scrollEnabled", "horizontal"]);
     const [focusedId] = _core_1.huds0nState.useProp("focusedId");
     const [scrollEnabled, setScrollEnabled] = (0, utilities_1.useState)(false);
     const containerLength = (0, utilities_1.useRef)(0);
@@ -21,16 +21,17 @@ exports.ScrollView = react_1.default.forwardRef((props, ref) => {
         }
     }, [focusedId, inputPadding, scrollRef.current]);
     const handleScroll = (0, utilities_1.useCallback)((event) => {
-        onScroll?.(event);
+        onScroll === null || onScroll === void 0 ? void 0 : onScroll(event);
         scrollPositionRef.current = event.nativeEvent.contentOffset.y;
     }, [onScroll]);
     const handleScrollEnable = (0, utilities_1.useCallback)(() => {
+        var _a;
         if (containerLength.current &&
             scrollLength.current > containerLength.current) {
             setScrollEnabled(true);
         }
         else if (scrollEnabled) {
-            scrollRef.current?.scrollTo({ x: 0, y: 0, animated: false });
+            (_a = scrollRef.current) === null || _a === void 0 ? void 0 : _a.scrollTo({ x: 0, y: 0, animated: false });
             setScrollEnabled(false);
         }
     }, [scrollEnabled]);

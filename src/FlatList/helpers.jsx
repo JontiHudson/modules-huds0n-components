@@ -10,9 +10,9 @@ function getKeyExtractor({ keyName, keyExtractor, }) {
 }
 exports.getKeyExtractor = getKeyExtractor;
 function getRefreshControl({ activityIndicatorColor, onPullToRefresh, refreshControl, }) {
-    const [handlePullToRefresh, refreshing] = (0, utilities_1.useAsyncCallback)(async () => {
-        await onPullToRefresh?.();
-    }, [onPullToRefresh]);
+    const [handlePullToRefresh, refreshing] = (0, utilities_1.useAsyncCallback)(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        yield (onPullToRefresh === null || onPullToRefresh === void 0 ? void 0 : onPullToRefresh());
+    }), [onPullToRefresh]);
     const _refreshControl = (0, utilities_1.useMemo)(() => onPullToRefresh ? (<react_native_1.RefreshControl tintColor={activityIndicatorColor} refreshing={refreshing} onRefresh={handlePullToRefresh}/>) : (refreshControl), [activityIndicatorColor, onPullToRefresh, refreshing, refreshControl]);
     return {
         refreshControl: _refreshControl,
@@ -40,11 +40,11 @@ function handleDynamicScrollLayout({ onContentSizeChange, onLayout, onPullToRefr
         }
     }, [dynamicScrollingEnabled]);
     const _onLayout = (0, utilities_1.useCallback)((event) => {
-        onLayout?.(event);
+        onLayout === null || onLayout === void 0 ? void 0 : onLayout(event);
         handleChange(containerHeightRef, event.nativeEvent.layout.height);
     }, [dynamicScrollingEnabled, onLayout]);
     const handleContentSizeChange = (0, utilities_1.useCallback)((width, height) => {
-        onContentSizeChange?.(width, height);
+        onContentSizeChange === null || onContentSizeChange === void 0 ? void 0 : onContentSizeChange(width, height);
         handleChange(contentsHeightRef, height);
     }, [dynamicScrollingEnabled, onContentSizeChange]);
     return {
