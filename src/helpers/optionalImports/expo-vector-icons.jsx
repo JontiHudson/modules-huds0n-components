@@ -4,4 +4,4 @@ exports.ExpoVectorIcons = void 0;
 try {
     exports.ExpoVectorIcons = require('@expo/vector-icons');
 }
-catch (_a) { }
+catch { }

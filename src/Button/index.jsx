@@ -10,7 +10,7 @@ const _core_1 = require("@huds0n/utilities/src/_core");
 const Pressable_1 = require("../Pressable");
 const Label_1 = require("./Label");
 function Button(props) {
-    const { children, color, dismissInputOnPress = true, disabledStyle, label, onPress, pressedStyle, spinner, spinnerColor = theme_1.theme.colors.WHITE, spinnerStyle, style } = props, restProps = (0, tslib_1.__rest)(props, ["children", "color", "dismissInputOnPress", "disabledStyle", "label", "onPress", "pressedStyle", "spinner", "spinnerColor", "spinnerStyle", "style"]);
+    const { children, color, dismissInputOnPress = true, disabledStyle, label, onPress, pressedStyle, spinner, spinnerColor = theme_1.theme.colors.WHITE, spinnerStyle, style, ...restProps } = props;
     const disabled = handleDisabled(props);
     return (<Pressable_1.Pressable feedback={handleDefaultFeedback(props)} {...restProps} requiresNetwork={false} onPress={handleOnPress(props)} disabled={disabled} style={handleStyle(props, disabled)}>
       {handleContents(props, disabled)}
@@ -27,12 +27,11 @@ function handleDisabled({ disabled: disabledProp, onLongPress, onPress, onPressI
     return disabled;
 }
 function handleDefaultFeedback({ color, pressedStyle, style, }) {
-    var _a, _b;
-    if (pressedStyle && ((_a = react_native_1.StyleSheet.flatten(pressedStyle)) === null || _a === void 0 ? void 0 : _a.backgroundColor)) {
+    if (pressedStyle && react_native_1.StyleSheet.flatten(pressedStyle)?.backgroundColor) {
         return undefined;
     }
     if (color ||
-        (typeof style !== "function" && ((_b = react_native_1.StyleSheet.flatten(style)) === null || _b === void 0 ? void 0 : _b.backgroundColor))) {
+        (typeof style !== "function" && react_native_1.StyleSheet.flatten(style)?.backgroundColor)) {
         return "highlight";
     }
     return "fade";

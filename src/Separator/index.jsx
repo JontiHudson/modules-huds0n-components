@@ -15,8 +15,8 @@ function Separator(props) {
             }}/>);
     }
     return (<react_native_1.View style={{
-            height: height !== null && height !== void 0 ? height : theme_1.theme.spacings.M,
-            width: width !== null && width !== void 0 ? width : theme_1.theme.spacings.M,
+            height: height ?? theme_1.theme.spacings.M,
+            width: width ?? theme_1.theme.spacings.M,
         }}/>);
 }
 exports.Separator = Separator;
